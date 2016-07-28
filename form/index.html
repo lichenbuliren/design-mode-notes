@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>策略模式表单校验</title>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.0.js"></script>
+  <script type="text/javascript" src="./strategy.js"></script>
+  <script type="text/javascript" src="./validator.js"></script>
+</head>
+<body>
+  <div class="container">
+    <form action="javascript:;">
+      <div class="row-control">
+        <label>手机号：</label><input type="text" name="mobile" maxlength="11">
+      </div>
+      <div class="row-control">
+        <label>密码：</label><input type="text" name="password">
+      </div>
+      <div class="row-control">
+        <label>Email：</label><input type="text" name="email">
+      </div>
+      <input type="submit" value="提交">
+    </form>
+  </div>
+  <script type="text/javascript">
+  $(function() {
+
+    $('form').on('submit', function() {
+      var errorMsg = validateFunc();
+
+      if (errorMsg) {
+        alert(errorMsg);
+        return false;
+      }
+    });
+
+    var validateFunc = function() {
+      var validator = new Validator();
+
+      validator.add($('input[name=mobile]').val(), 'isMobile', '手机号格式不正确');
+      validator.add($('input[name=password]').val(), 'minLength:6', '密码长度不能少于6位');
+      validator.add($('input[name=email]').val(), 'isNonEmpty', '邮箱不能为空');
+      return validator.start();
+    }
+  });
+  </script>
+</body>
+</html>
